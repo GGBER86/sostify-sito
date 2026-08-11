@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestione Blog · Sostify</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="assets/sostify-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body class="admin-body">
+
+<!-- ============ LOGIN AREA RISERVATA ============ -->
+<div class="gate" id="gate">
+  <div class="gate__card">
+    <img src="assets/sostify-logo.svg" alt="Sostify">
+    <h1>Area riservata</h1>
+    <p>Accedi per gestire il blog</p>
+    <button class="btn btn--grad" id="gateNetlify"><i class="ti ti-shield-check"></i> Accedi in modo sicuro</button>
+    <div class="gate__div">oppure</div>
+    <form id="gateForm" onsubmit="return false">
+      <input type="password" id="gatePass" placeholder="Password" autocomplete="current-password">
+      <div class="gate__err" id="gateErr"></div>
+      <button class="btn btn--primary" id="gateEnter" style="width:100%;justify-content:center">Entra</button>
+    </form>
+    <p class="gate__note">L'accesso sicuro usa Netlify Identity (autenticazione sui server, con email e password). La password qui sopra è un accesso rapido di riserva.</p>
+  </div>
+</div>
+
+
+<div class="admin-top"><div class="wrap">
+  <div style="display:flex;align-items:center;gap:14px">
+    <img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo">
+    <span class="tag">Gestione Blog</span>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <a class="btn-sm" href="blog.html" target="_blank" style="text-decoration:none">Vedi il blog</a>
+    <button class="btn-sm btn-sm--grad" id="btnExport">⬇ Esporta &amp; pubblica</button>
+    <button class="btn-sm" id="btnLogout" title="Esci">Esci</button>
+  </div>
+</div></div>
+
+<div class="admin-grid">
+  <!-- LISTA -->
+  <aside class="admin-list">
+    <h3>Articoli <button class="btn-sm btn-sm--primary" id="btnNew">+ Nuovo</button></h3>
+    <div id="list"></div>
+    <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+      <button class="btn-sm" id="btnImport">⬆ Importa file</button>
+      <input type="file" id="importFile" accept=".js,.json" style="display:none">
+      <button class="btn-sm btn-sm--danger" id="btnReset">↺ Ripristina esempi</button>
+    </div>
+  </aside>
+
+  <!-- EDITOR -->
+  <section class="admin-editor" id="editorWrap">
+    <div class="admin-hint">Le modifiche restano salvate in questo browser. Per pubblicarle sul sito online premi <b>Esporta &amp; pubblica</b>, poi sostituisci il file <code>assets/blog/articles.js</code> nello zip e ricarica su Netlify.</div>
+    <h2 id="edTitle">Nuovo articolo</h2>
+    <form id="form" onsubmit="return false">
+      <div class="af">
+        <div class="field field--full"><label>Titolo</label><input id="f_title" placeholder="Titolo dell'articolo"></div>
+        <div class="field"><label>Slug (URL)</label><input id="f_slug" placeholder="titolo-articolo"></div>
+        <div class="field"><label>Categoria</label><input id="f_category" list="cats" placeholder="Proprietari"><datalist id="cats"></datalist></div>
+        <div class="field"><label>Autore</label><input id="f_author" placeholder="Team Sostify"></div>
+        <div class="field"><label>Data</label><input id="f_date" type="date"></div>
+        <div class="field"><label>Minuti di lettura <small style="font-weight:400;color:var(--ink-faint)">(auto se vuoto)</small></label><input id="f_readTime" type="number" min="1" placeholder="auto"></div>
+        <div class="field"><label>Pubblicato</label>
+          <select id="f_published"><option value="true">Sì · visibile</option><option value="false">No · bozza</option></select>
+        </div>
+        <div class="field field--full"><label>Estratto</label><textarea id="f_excerpt" rows="2" placeholder="Breve riassunto mostrato nelle card"></textarea></div>
+
+        <div class="field field--full"><label>Immagine di copertina</label>
+          <input id="f_cover" placeholder="assets/blog/covers/... oppure URL, oppure carica sotto">
+          <div class="dropzone" id="coverDrop">Trascina qui un'immagine o clicca per caricare (la ridimensiono io)</div>
+          <input type="file" id="coverFile" accept="image/*" style="display:none">
+          <div id="coverPrev"></div>
+        </div>
+
+        <div class="field field--full"><label>Tag <small style="font-weight:400;color:var(--ink-faint)">(separati da virgola)</small></label>
+          <input id="f_tags" placeholder="affitti brevi, revenue, Milano"></div>
+
+        <div class="field field--full"><label>Galleria immagini</label>
+          <div class="dropzone" id="galDrop">Trascina o clicca per aggiungere più foto</div>
+          <input type="file" id="galFile" accept="image/*" multiple style="display:none">
+          <div id="galPrev"></div>
+        </div>
+
+        <div class="field field--full">
+          <label style="display:flex;justify-content:space-between;align-items:center">Contenuto (Markdown)
+            <button class="btn-sm" type="button" id="btnPreview">👁 Anteprima</button></label>
+          <textarea id="f_body" class="body" placeholder="## Sottotitolo&#10;&#10;Testo del paragrafo con **grassetto**, *corsivo* e [link](contatti.html).&#10;&#10;- punto 1&#10;- punto 2&#10;&#10;> Una citazione in evidenza."></textarea>
+          <div class="preview" id="preview" style="display:none"></div>
+        </div>
+      </div>
+
+      <div class="admin-actions">
+        <button class="btn-sm btn-sm--grad" id="btnSave">💾 Salva</button>
+        <button class="btn-sm" id="btnDuplicate">⧉ Duplica</button>
+        <button class="btn-sm btn-sm--danger" id="btnDelete">🗑 Elimina</button>
+        <a class="btn-sm" id="btnOpen" href="#" target="_blank" style="text-decoration:none;margin-left:auto">↗ Apri articolo</a>
+      </div>
+    </form>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/blog/articles.js"></script>
+<script src="assets/blog/blog-core.js"></script>
+<script>
+/* ===== Autenticazione area riservata ===== */
+(function(){
+  // SHA-256 della password di riserva (default: SostifyBlog2026!). Cambiala rigenerando questo hash.
+  var GATE_HASH="7052f0508321dfe83ced939a95b9fd85099862062418733819400d2576d21ef0";
+  var gate=document.getElementById('gate');
+  var authed=false;
+
+  function unlock(){ if(authed) return; authed=true; gate.style.display='none'; }
+  function lock(){ authed=false; gate.style.display='flex'; }
+
+  // Accesso rapido già effettuato in questa sessione
+  try{ if(sessionStorage.getItem('sostify_admin_ok')==='1') unlock(); }catch(e){}
+
+  // --- Netlify Identity (sicuro, lato server) ---
+  if(window.netlifyIdentity){
+    try{
+      netlifyIdentity.init();
+      if(netlifyIdentity.currentUser()) unlock();
+      netlifyIdentity.on('login',function(){ try{netlifyIdentity.close();}catch(e){} unlock(); });
+      netlifyIdentity.on('logout',function(){ try{sessionStorage.removeItem('sostify_admin_ok');}catch(e){} lock(); });
+    }catch(e){}
+  }
+  document.getElementById('gateNetlify').addEventListener('click',function(){
+    if(window.netlifyIdentity){ netlifyIdentity.open(); }
+    else { document.getElementById('gateErr').textContent='Login sicuro disponibile solo sul sito pubblicato con Identity attivo.'; }
+  });
+
+  // --- Password di riserva (SHA-256) ---
+  async function sha(s){
+    if(window.crypto&&crypto.subtle){
+      var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+      return Array.prototype.map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0');}).join('');
+    }
+    return null;
+  }
+  async function tryPass(){
+    var v=document.getElementById('gatePass').value;
+    var h=await sha(v);
+    if(h===null){ document.getElementById('gateErr').textContent='Usa "Accedi in modo sicuro".'; return; }
+    if(h===GATE_HASH){ try{sessionStorage.setItem('sostify_admin_ok','1');}catch(e){} unlock(); }
+    else { document.getElementById('gateErr').textContent='Password errata.'; }
+  }
+  document.getElementById('gateEnter').addEventListener('click',tryPass);
+  document.getElementById('gatePass').addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); tryPass(); } });
+
+  // --- Logout ---
+  document.getElementById('btnLogout').addEventListener('click',function(){
+    try{ sessionStorage.removeItem('sostify_admin_ok'); }catch(e){}
+    if(window.netlifyIdentity && netlifyIdentity.currentUser()){ netlifyIdentity.logout(); }
+    lock();
+  });
+})();
+</script>
+<script>
+(function(){
+  var B=window.SostifyBlog;
+  var list=B.getAll();
+  var current=null;        // slug in modifica, null = nuovo
+  var slugAuto=true;       // lo slug segue il titolo finché non lo tocchi
+  var gallery=[];          // array immagini (url o dataURL)
+  var coverVal="";
+
+  var $=function(id){return document.getElementById(id);};
+  function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1900);}
+
+  function persist(){ B.saveAll(list); }
+
+  // ---- rendering lista ----
+  function renderList(){
+    var cats=list.map(function(a){return a.category;}).filter(function(v,i,s){return v&&s.indexOf(v)===i;});
+    $('cats').innerHTML=cats.map(function(c){return '<option value="'+c+'">';}).join('');
+    if(!list.length){ $('list').innerHTML='<p style="color:var(--ink-faint);font-size:14px">Nessun articolo. Crea il primo con “+ Nuovo”.</p>'; return; }
+    $('list').innerHTML=list.map(function(a){
+      var on=a.published!==false;
+      return '<div class="admin-item'+(a.slug===current?' active':'')+'" data-slug="'+a.slug+'">'
+        +'<b><span class="dot '+(on?'dot--on':'dot--off')+'"></span>'+(a.title||'(senza titolo)')+'</b>'
+        +'<small>'+(a.category||'—')+' · '+B.fmtDate(a.date)+'</small></div>';
+    }).join('');
+    document.querySelectorAll('.admin-item').forEach(function(el){
+      el.addEventListener('click',function(){ edit(el.getAttribute('data-slug')); });
+    });
+  }
+
+  // ---- caricamento in form ----
+  function blank(){ return {slug:'',title:'',category:'',author:'Team Sostify',date:new Date().toISOString().slice(0,10),readTime:'',excerpt:'',cover:'',tags:[],gallery:[],body:'',published:true}; }
+  function load(a){
+    $('f_title').value=a.title||''; $('f_slug').value=a.slug||'';
+    $('f_category').value=a.category||''; $('f_author').value=a.author||'';
+    $('f_date').value=a.date||''; $('f_readTime').value=a.readTime||'';
+    $('f_excerpt').value=a.excerpt||''; $('f_tags').value=(a.tags||[]).join(', ');
+    $('f_body').value=a.body||''; $('f_published').value=String(a.published!==false);
+    coverVal=a.cover||''; $('f_cover').value=coverVal; renderCover();
+    gallery=(a.gallery||[]).slice(); renderGallery();
+    $('preview').style.display='none';
+    updateOpenLink();
+  }
+  function edit(slug){
+    var a=list.filter(function(x){return x.slug===slug;})[0]; if(!a) return;
+    current=slug; slugAuto=false; $('edTitle').textContent='Modifica articolo';
+    load(a); renderList();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function newArticle(){
+    current=null; slugAuto=true; $('edTitle').textContent='Nuovo articolo';
+    load(blank()); renderList();
+  }
+
+  // ---- cover & gallery preview ----
+  function renderCover(){
+    $('coverPrev').innerHTML = coverVal
+      ? '<div class="thumb"><img src="'+coverVal+'" alt=""><button type="button" data-x="cover">×</button></div>' : '';
+  }
+  function renderGallery(){
+    $('galPrev').innerHTML = gallery.map(function(src,i){
+      return '<div class="thumb"><img src="'+src+'" alt=""><button type="button" data-gi="'+i+'">×</button></div>';
+    }).join('');
+  }
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(t.getAttribute&&t.getAttribute('data-x')==='cover'){ coverVal=''; $('f_cover').value=''; renderCover(); }
+    if(t.getAttribute&&t.getAttribute('data-gi')!==null&&t.getAttribute('data-gi')!==undefined&&t.hasAttribute&&t.hasAttribute('data-gi')){
+      gallery.splice(parseInt(t.getAttribute('data-gi'),10),1); renderGallery();
+    }
+  });
+
+  // ---- ridimensiona immagine -> dataURL ----
+  function downscale(file, maxW, cb){
+    var r=new FileReader();
+    r.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var w=img.width,h=img.height;
+        if(w>maxW){ h=Math.round(h*maxW/w); w=maxW; }
+        var c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        cb(c.toDataURL('image/jpeg',0.82));
+      };
+      img.src=r.result;
+    };
+    r.readAsDataURL(file);
+  }
+  function bindDrop(zoneId,inputId,onImg,multiple){
+    var z=$(zoneId),inp=$(inputId);
+    z.addEventListener('click',function(){inp.click();});
+    z.addEventListener('dragover',function(e){e.preventDefault();z.style.borderColor='#22C79E';});
+    z.addEventListener('dragleave',function(){z.style.borderColor='';});
+    z.addEventListener('drop',function(e){e.preventDefault();z.style.borderColor='';handle(e.dataTransfer.files);});
+    inp.addEventListener('change',function(){handle(inp.files);inp.value='';});
+    function handle(files){ Array.prototype.forEach.call(files,function(f){ if(f.type.indexOf('image/')===0) downscale(f,1400,onImg); }); }
+  }
+  bindDrop('coverDrop','coverFile',function(url){ coverVal=url; $('f_cover').value='[immagine caricata]'; renderCover(); },false);
+  bindDrop('galDrop','galFile',function(url){ gallery.push(url); renderGallery(); },true);
+
+  $('f_cover').addEventListener('input',function(){ if($('f_cover').value!=='[immagine caricata]'){ coverVal=$('f_cover').value; renderCover(); } });
+
+  // ---- slug auto dal titolo ----
+  $('f_title').addEventListener('input',function(){ if(slugAuto){ $('f_slug').value=B.slugify($('f_title').value); } updateOpenLink(); });
+  $('f_slug').addEventListener('input',function(){ slugAuto=false; updateOpenLink(); });
+  function updateOpenLink(){ var s=$('f_slug').value; $('btnOpen').href = s? ('articolo.html?slug='+encodeURIComponent(s)) : '#'; }
+
+  // ---- anteprima ----
+  $('btnPreview').addEventListener('click',function(){
+    var p=$('preview');
+    if(p.style.display==='none'){ p.innerHTML='<div class="prose">'+B.mdToHtml($('f_body').value)+'</div>'; p.style.display='block'; }
+    else p.style.display='none';
+  });
+
+  // ---- raccogli form ----
+  function collect(){
+    var title=$('f_title').value.trim();
+    var slug=$('f_slug').value.trim()||B.slugify(title);
+    return {
+      slug:slug, title:title, category:$('f_category').value.trim(),
+      author:$('f_author').value.trim()||'Team Sostify', date:$('f_date').value||new Date().toISOString().slice(0,10),
+      readTime:$('f_readTime').value?parseInt($('f_readTime').value,10):B.readingTime($('f_body').value),
+      excerpt:$('f_excerpt').value.trim(),
+      cover:coverVal,
+      tags:$('f_tags').value.split(',').map(function(s){return s.trim();}).filter(Boolean),
+      gallery:gallery.slice(),
+      body:$('f_body').value,
+      published:$('f_published').value==='true'
+    };
+  }
+
+  // ---- salva ----
+  $('btnSave').addEventListener('click',function(){
+    var a=collect();
+    if(!a.title){ toast('Aggiungi un titolo'); return; }
+    if(!a.slug){ toast('Slug mancante'); return; }
+    // slug univoco
+    var clash=list.filter(function(x){return x.slug===a.slug && x.slug!==current;}).length;
+    if(clash){ toast('Slug già usato, cambialo'); return; }
+    if(current){ // update
+      var idx=list.map(function(x){return x.slug;}).indexOf(current);
+      list[idx]=a;
+    } else { list.unshift(a); }
+    current=a.slug; slugAuto=false; $('edTitle').textContent='Modifica articolo';
+    persist(); renderList(); updateOpenLink(); toast('Salvato ✓');
+  });
+
+  $('btnDelete').addEventListener('click',function(){
+    if(!current){ newArticle(); return; }
+    if(!confirm('Eliminare definitivamente questo articolo?')) return;
+    list=list.filter(function(x){return x.slug!==current;});
+    persist(); newArticle(); toast('Eliminato');
+  });
+
+  $('btnDuplicate').addEventListener('click',function(){
+    var a=collect(); a.slug=B.slugify(a.slug+'-copia'); a.title=a.title+' (copia)'; a.published=false;
+    list.unshift(a); current=a.slug; slugAuto=false; load(a); persist(); renderList(); toast('Duplicato come bozza');
+  });
+
+  $('btnNew').addEventListener('click',newArticle);
+
+  // ---- export / import / reset ----
+  function download(name,content,type){
+    var blob=new Blob([content],{type:type||'text/plain'});
+    var url=URL.createObjectURL(blob); var a=document.createElement('a');
+    a.href=url; a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);a.remove();},100);
+  }
+  $('btnExport').addEventListener('click',function(){
+    var content='/* Sostify · dati blog esportati dal pannello il '+new Date().toLocaleString('it-IT')+' */\n'
+      +'window.SOSTIFY_SEED = '+JSON.stringify(list,null,2)+';\n';
+    download('articles.js',content,'application/javascript');
+    toast('Scaricato articles.js — sostituiscilo in assets/blog/ e ripubblica');
+  });
+  $('btnImport').addEventListener('click',function(){ $('importFile').click(); });
+  $('importFile').addEventListener('change',function(){
+    var f=$('importFile').files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var txt=r.result, data;
+        var m=txt.match(/window\.SOSTIFY_SEED\s*=\s*([\s\S]*?);?\s*$/);
+        data=JSON.parse(m?m[1]:txt);
+        if(!Array.isArray(data)) throw 0;
+        list=data; persist(); newArticle(); toast('Importati '+data.length+' articoli');
+      }catch(e){ toast('File non valido'); }
+    };
+    r.readAsText(f); $('importFile').value='';
+  });
+  $('btnReset').addEventListener('click',function(){
+    if(!confirm('Ripristinare gli articoli di esempio? Le modifiche non esportate andranno perse.')) return;
+    B.resetToSeed(); list=B.getAll(); newArticle(); toast('Ripristinati gli esempi');
+  });
+
+  // init
+  renderList(); newArticle();
+})();
+</script>
+</body>
+</html>

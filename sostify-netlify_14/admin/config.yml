@@ -1,0 +1,39 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Permette anteprima locale del CMS con `npx decap-server` (facoltativo)
+local_backend: true
+
+media_folder: "assets/blog/uploads"
+public_folder: "assets/blog/uploads"
+
+locale: "it"
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    files:
+      - name: "articoli"
+        label: "Articoli del blog"
+        file: "assets/blog/articles.json"
+        description: "Aggiungi, modifica o elimina gli articoli. Salvando, il sito si aggiorna da solo."
+        fields:
+          - name: "articles"
+            label: "Articoli"
+            label_singular: "Articolo"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { name: "title", label: "Titolo", widget: "string" }
+              - { name: "slug", label: "Slug (URL)", widget: "string", hint: "Solo minuscole e trattini, es. cosa-vedere-a-milano" }
+              - { name: "category", label: "Categoria", widget: "select", options: ["Proprietari", "Gestori", "Tecnologia", "Ospiti"] }
+              - { name: "author", label: "Autore", widget: "string", required: false, default: "Team Sostify" }
+              - { name: "date", label: "Data", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { name: "readTime", label: "Minuti di lettura", widget: "number", required: false, hint: "Lascia vuoto per calcolo automatico", value_type: "int", min: 1 }
+              - { name: "excerpt", label: "Estratto", widget: "text", required: false }
+              - { name: "cover", label: "Immagine di copertina", widget: "image", required: false, choose_url: true }
+              - { name: "tags", label: "Tag", widget: "list", required: false, default: [] }
+              - { name: "gallery", label: "Galleria (facoltativa)", widget: "list", required: false, field: { name: "image", label: "Immagine", widget: "image" } }
+              - { name: "body", label: "Contenuto", widget: "markdown" }
+              - { name: "published", label: "Pubblicato", widget: "boolean", default: true }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contatti | Parla con Sostify</title>
+<meta name="description" content="Contatta Sostify: telefono +39 351 6199265, email info@sostify.com. Prenota una consulenza per proprietari o scrivi al Lifestyle Manager per il tuo soggiorno.">
+<meta property="og:title" content="Contatti | Sostify">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .field{margin-bottom:16px}
+  .field label{display:block;font-family:var(--font-display);font-weight:600;font-size:14px;margin-bottom:6px}
+  .field input,.field select,.field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;font:inherit;color:var(--ink);background:#fff}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:3px solid rgba(22,200,230,.4);border-color:var(--green)}
+  .contact{display:grid;grid-template-columns:1fr .9fr;gap:28px;align-items:start}
+  @media(max-width:820px){.contact{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<header class="site-header"><div class="wrap"><nav class="nav" id="nav">
+  <a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a>
+  <div class="nav__links"><a href="le-nostre-strutture.html">Soggiorni</a><a href="diventa-host.html">Diventa host</a><a href="i-nostri-servizi.html">Servizi</a><a href="perche-sostify.html">Perché Sostify</a><a href="blog.html">Blog</a><a href="contatti.html">Contatti</a></div>
+  <div class="nav__cta"><a class="btn btn--primary" href="valutazione-gratuita.html">Valutazione gratuita</a></div>
+  <button class="nav__toggle" aria-label="Apri menu" onclick="document.getElementById('nav').classList.toggle('open')"><i class="ti ti-menu-2"></i></button>
+</nav></div></header>
+
+<section class="hero"><div class="wrap"><div style="max-width:720px;padding:52px 0 12px">
+  <span class="kicker"><i class="ti ti-message-dots"></i> Contatti</span>
+  <h1 style="font-size:clamp(32px,4.6vw,52px);margin:16px 0 14px">Parliamone</h1>
+  <p class="lead">Sei un proprietario e vuoi una valutazione? Un ospite con una domanda sul soggiorno? Scrivici: rispondiamo in fretta.</p>
+</div></div></section>
+
+<section class="section section--tight"><div class="wrap"><div class="contact">
+  <div class="card" style="padding:28px">
+    <form name="contatto" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return sostifySubmit(this,event)">
+      <input type="hidden" name="form-name" value="contatto">
+      <p hidden><label>Non compilare: <input name="bot-field"></label></p>
+      <div class="field"><label>Sono un…</label><select name="profilo"><option>Proprietario di immobile</option><option>Gestore di B&amp;B / casa vacanza</option><option>Ospite</option><option>Altro</option></select></div>
+      <div class="field"><label>Nome e cognome</label><input name="nome" required placeholder="Mario Rossi"></div>
+      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="mario@email.it"></div>
+      <div class="field"><label>Telefono</label><input name="telefono" placeholder="+39 ..."></div>
+      <div class="field"><label>Messaggio</label><textarea name="messaggio" rows="4" placeholder="Come possiamo aiutarti?"></textarea></div>
+      <button class="btn btn--primary" type="submit"><i class="ti ti-send"></i> Invia messaggio</button>
+      <p class="msg" style="display:none;color:var(--green-deep);font-weight:600;margin-top:14px"><i class="ti ti-circle-check"></i> Grazie! Abbiamo ricevuto il tuo messaggio, ti rispondiamo al più presto.</p>
+    </form>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:18px"><div class="card__ico ico--green"><i class="ti ti-phone"></i></div><h3>Telefono</h3><p><a href="tel:+393516199265" style="color:var(--green-deep);font-weight:600">+39 351 6199265</a></p></div>
+    <div class="card" style="margin-bottom:18px"><div class="card__ico ico--cyan"><i class="ti ti-mail"></i></div><h3>Email</h3><p><a href="mailto:info@sostify.com" style="color:var(--green-deep);font-weight:600">info@sostify.com</a></p></div>
+    <div class="card"><div class="card__ico ico--green"><i class="ti ti-clock"></i></div><h3>Assistenza ospiti</h3><p>Il Lifestyle Manager e il chatbot sono disponibili 24/7 durante il soggiorno.</p></div>
+  </div>
+</div></div></section>
+
+<footer class="footer"><div class="wrap">
+  <div class="footer__grid">
+    <div><a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a><p class="footer__note">Property &amp; Lifestyle Management per l'ospitalità extralberghiera italiana.</p></div>
+    <div><h5>Proprietari</h5><ul><li><a href="diventa-host.html">Diventa host</a></li><li><a href="valutazione-gratuita.html">Valutazione gratuita</a></li><li><a href="host-suite.html">Host Suite</a></li></ul></div>
+    <div><h5>Ospiti</h5><ul><li><a href="le-nostre-strutture.html">Le nostre strutture</a></li><li><a href="perche-sostify.html">Perché Sostify</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div><h5>Contatti</h5><ul><li><a href="tel:+393516199265"><i class="ti ti-phone"></i> +39 351 6199265</a></li><li><a href="mailto:info@sostify.com"><i class="ti ti-mail"></i> info@sostify.com</a></li></ul></div>
+  </div>
+  <div class="footer__bottom"><span>© 2026 Sostify. Tutti i diritti riservati.</span><span><a href="#">Privacy</a> · <a href="#">Cookie</a></span></div>
+</div></footer>
+<script src="assets/forms.js"></script>
+</body>
+</html>

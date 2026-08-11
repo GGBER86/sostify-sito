@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog Sostify | Affitti brevi, revenue e soggiorni in Italia</title>
+<meta name="description" content="Guide e consigli su affitti brevi, revenue management, tecnologia per l'ospitalità e soggiorni a Milano e Bergamo. Il blog di Sostify.">
+<meta property="og:title" content="Blog | Sostify">
+<link rel="icon" href="assets/sostify-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="topbar"></div>
+<header class="site-header"><div class="wrap"><nav class="nav" id="nav">
+  <a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a>
+  <div class="nav__links"><a href="le-nostre-strutture.html">Soggiorni</a><a href="diventa-host.html">Diventa host</a><a href="i-nostri-servizi.html">Servizi</a><a href="perche-sostify.html">Perché Sostify</a><a href="blog.html">Blog</a><a href="contatti.html">Contatti</a></div>
+  <div class="nav__cta"><a class="btn btn--primary" href="valutazione-gratuita.html">Valutazione gratuita</a></div>
+  <button class="nav__toggle" aria-label="Apri menu" onclick="document.getElementById('nav').classList.toggle('open')"><i class="ti ti-menu-2"></i></button>
+</nav></div></header>
+
+<section class="hero"><div class="wrap"><div style="max-width:720px;padding:52px 0 12px">
+  <span class="kicker"><i class="ti ti-news"></i> Blog</span>
+  <h1 style="font-size:clamp(32px,4.6vw,52px);margin:16px 0 14px">Idee, dati e consigli sull'ospitalità italiana</h1>
+  <p class="lead">Contenuti per proprietari, gestori e ospiti su affitti brevi, revenue e soggiorni a Milano e Bergamo.</p>
+</div></div></section>
+
+<section class="section section--tight"><div class="wrap">
+  <div id="featured"></div>
+  <div class="blog-filters" id="filters"></div>
+  <div class="grid grid-3" id="grid"></div>
+  <p id="empty" style="display:none;color:var(--ink-faint)">Nessun articolo in questa categoria.</p>
+</div></div></section>
+
+<section class="section section--tight"><div class="wrap"><div class="cta-band">
+  <div><h2>Vuoi ricevere le nostre guide?</h2><p>Consigli su affitti brevi e ospitalità, direttamente nella tua inbox.</p></div>
+  <a class="btn btn--grad" href="contatti.html"><i class="ti ti-mail"></i> Iscriviti alla newsletter</a>
+</div></div></section>
+
+<footer class="footer"><div class="wrap">
+  <div class="footer__grid">
+    <div><a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a><p class="footer__note">Property &amp; Lifestyle Management per l'ospitalità extralberghiera italiana.</p></div>
+    <div><h5>Proprietari</h5><ul><li><a href="diventa-host.html">Diventa host</a></li><li><a href="valutazione-gratuita.html">Valutazione gratuita</a></li><li><a href="pulizie.html">Servizio pulizie</a></li><li><a href="host-suite.html">Host Suite</a></li></ul></div>
+    <div><h5>Ospiti</h5><ul><li><a href="le-nostre-strutture.html">Le nostre strutture</a></li><li><a href="perche-sostify.html">Perché Sostify</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div><h5>Contatti</h5><ul><li><a href="tel:+393516199265"><i class="ti ti-phone"></i> +39 351 6199265</a></li><li><a href="mailto:info@sostify.com"><i class="ti ti-mail"></i> info@sostify.com</a></li></ul></div>
+  </div>
+  <div class="footer__bottom"><span>© 2026 Sostify. Tutti i diritti riservati.</span><span><a href="#">Privacy</a> · <a href="#">Cookie</a></span></div>
+</div></footer>
+
+<script src="assets/blog/articles.js"></script>
+<script src="assets/blog/blog-core.js"></script>
+<script>
+(function(){
+  var B=window.SostifyBlog;
+  B.ready(function(){
+  var all=B.published();
+  var active="Tutti";
+
+  function coverStyle(a){ return a.cover ? ('background-image:url('+JSON.stringify(a.cover).slice(1,-1)+')') : ''; }
+  function card(a){
+    return '<a class="post" href="articolo.html?slug='+encodeURIComponent(a.slug)+'">'
+      + '<div class="cover" style="'+coverStyle(a)+'"><span class="cat-chip">'+a.category+'</span></div>'
+      + '<div class="body"><h3>'+a.title+'</h3><p>'+(a.excerpt||'')+'</p>'
+      + '<div class="meta"><span>'+B.fmtDate(a.date)+'</span><span>·</span><span>'+(a.readTime||B.readingTime(a.body))+' min</span></div>'
+      + '</div></a>';
+  }
+  function featured(a){
+    document.getElementById('featured').innerHTML =
+      '<a class="feat" href="articolo.html?slug='+encodeURIComponent(a.slug)+'" style="text-decoration:none;color:inherit">'
+      + '<div class="feat__img" style="'+coverStyle(a)+'"></div>'
+      + '<div class="feat__body"><span class="cat">'+a.category+'</span><h2>'+a.title+'</h2>'
+      + '<p>'+(a.excerpt||'')+'</p>'
+      + '<div class="feat__meta"><span>'+B.fmtDate(a.date)+'</span><span>·</span><span>'+(a.readTime||B.readingTime(a.body))+' min di lettura</span></div>'
+      + '<span class="btn btn--grad" style="align-self:flex-start">Leggi l\'articolo <i class="ti ti-arrow-right"></i></span>'
+      + '</div></a>';
+  }
+  function renderFilters(){
+    var cats=["Tutti"].concat(all.map(function(a){return a.category;}).filter(function(v,i,s){return s.indexOf(v)===i;}));
+    document.getElementById('filters').innerHTML = cats.map(function(c){
+      return '<button class="chip-btn'+(c===active?' active':'')+'" data-c="'+c+'">'+c+'</button>';
+    }).join('');
+    document.querySelectorAll('.chip-btn').forEach(function(b){
+      b.addEventListener('click',function(){ active=b.getAttribute('data-c'); renderFilters(); renderGrid(); });
+    });
+  }
+  function renderGrid(){
+    var list=all.slice(1); // il primo è featured
+    if(active!=="Tutti") list=all.filter(function(a){return a.category===active;});
+    var g=document.getElementById('grid'); g.innerHTML=list.map(card).join('');
+    document.getElementById('empty').style.display=list.length?'none':'block';
+    document.getElementById('featured').style.display=(active==="Tutti")?'block':'none';
+  }
+
+  if(!all.length){ document.getElementById('grid').innerHTML='<p style="color:var(--ink-faint)">Ancora nessun articolo pubblicato.</p>'; return; }
+  featured(all[0]); renderFilters(); renderGrid();
+  });
+})();
+</script>
+</body>
+</html>

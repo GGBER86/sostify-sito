@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articolo | Blog Sostify</title>
+<meta name="description" content="Blog Sostify">
+<link rel="icon" href="assets/sostify-logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="topbar"></div>
+<header class="site-header"><div class="wrap"><nav class="nav" id="nav">
+  <a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a>
+  <div class="nav__links"><a href="le-nostre-strutture.html">Soggiorni</a><a href="diventa-host.html">Diventa host</a><a href="i-nostri-servizi.html">Servizi</a><a href="perche-sostify.html">Perché Sostify</a><a href="blog.html">Blog</a><a href="contatti.html">Contatti</a></div>
+  <div class="nav__cta"><a class="btn btn--primary" href="valutazione-gratuita.html">Valutazione gratuita</a></div>
+  <button class="nav__toggle" aria-label="Apri menu" onclick="document.getElementById('nav').classList.toggle('open')"><i class="ti ti-menu-2"></i></button>
+</nav></div></header>
+
+<main id="article"><!-- iniettato via JS --></main>
+
+<footer class="footer"><div class="wrap">
+  <div class="footer__grid">
+    <div><a class="brand" href="index.html"><img src="assets/sostify-logo.svg" alt="Sostify" class="brand__logo"></a><p class="footer__note">Property &amp; Lifestyle Management per l'ospitalità extralberghiera italiana.</p></div>
+    <div><h5>Proprietari</h5><ul><li><a href="diventa-host.html">Diventa host</a></li><li><a href="valutazione-gratuita.html">Valutazione gratuita</a></li><li><a href="pulizie.html">Servizio pulizie</a></li><li><a href="host-suite.html">Host Suite</a></li></ul></div>
+    <div><h5>Ospiti</h5><ul><li><a href="le-nostre-strutture.html">Le nostre strutture</a></li><li><a href="perche-sostify.html">Perché Sostify</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div><h5>Contatti</h5><ul><li><a href="tel:+393516199265"><i class="ti ti-phone"></i> +39 351 6199265</a></li><li><a href="mailto:info@sostify.com"><i class="ti ti-mail"></i> info@sostify.com</a></li></ul></div>
+  </div>
+  <div class="footer__bottom"><span>© 2026 Sostify. Tutti i diritti riservati.</span><span><a href="#">Privacy</a> · <a href="#">Cookie</a></span></div>
+</div></footer>
+
+<script src="assets/blog/articles.js"></script>
+<script src="assets/blog/blog-core.js"></script>
+<script>
+(function(){
+  var B=window.SostifyBlog;
+  B.ready(function(){
+  var slug=B.qs('slug');
+  var a=slug?B.bySlug(slug):null;
+  var root=document.getElementById('article');
+
+  if(!a || a.published===false){
+    root.innerHTML='<section class="section"><div class="wrap" style="text-align:center;padding:60px 0">'
+      +'<h1>Articolo non trovato</h1><p class="lead" style="margin:10px auto 22px">Forse è stato spostato o non è ancora pubblicato.</p>'
+      +'<a class="btn btn--grad" href="blog.html"><i class="ti ti-arrow-right"></i> Torna al blog</a></div></section>';
+    return;
+  }
+  document.title=a.title+' | Blog Sostify';
+  var md=document.querySelector('meta[name=description]'); if(md) md.setAttribute('content',a.excerpt||'');
+
+  function initials(name){return (name||'S').split(/\s+/).map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();}
+  var readTime=a.readTime||B.readingTime(a.body);
+  var cover=a.cover?('background-image:url('+JSON.stringify(a.cover).slice(1,-1)+')'):'';
+
+  var html='';
+  html+='<section class="article-hero"><div class="article-hero__bg" style="'+cover+'"></div>'
+      +'<div class="wrap"><span class="cat">'+a.category+'</span><h1>'+a.title+'</h1>'
+      +'<div class="article-meta"><span class="av">'+initials(a.author)+'</span><span>'+(a.author||'Sostify')+'</span>'
+      +'<span>·</span><span>'+B.fmtDate(a.date)+'</span><span>·</span><span>'+readTime+' min di lettura</span></div></div></section>';
+
+  html+='<article class="article-wrap"><div class="prose">'+B.mdToHtml(a.body)+'</div>';
+
+  if(a.gallery && a.gallery.length){
+    html+='<div class="article-gallery">'+a.gallery.map(function(src){return '<img src="'+src+'" alt="" loading="lazy">';}).join('')+'</div>';
+  }
+  if(a.tags && a.tags.length){
+    html+='<div class="article-tags">'+a.tags.map(function(t){return '<span>#'+t+'</span>';}).join('')+'</div>';
+  }
+
+  var url=encodeURIComponent(location.href);
+  html+='<div class="article-share"><span>Condividi:</span>'
+      +'<a href="https://www.linkedin.com/sharing/share-offsite/?url='+url+'" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="ti ti-brand-linkedin"></i></a>'
+      +'<a href="https://www.facebook.com/sharer/sharer.php?u='+url+'" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a>'
+      +'<a href="mailto:?subject='+encodeURIComponent(a.title)+'&body='+url+'" aria-label="Email"><i class="ti ti-mail"></i></a></div>';
+
+  html+='<div class="author-box"><span class="av">'+initials(a.author)+'</span><div><b>'+(a.author||'Team Sostify')+'</b>'
+      +'<p>Property &amp; Lifestyle Management per l\'ospitalità a Milano e Bergamo.</p></div></div>';
+
+  html+='</article>';
+
+  // Correlati
+  var rel=B.related(a.slug,a.category,3);
+  if(rel.length){
+    html+='<section class="section section--tight"><div class="wrap"><div class="head"><span class="eyebrow">Continua a leggere</span><h2>Articoli correlati</h2></div><div class="grid grid-3">';
+    html+=rel.map(function(r){
+      var c=r.cover?('background-image:url('+JSON.stringify(r.cover).slice(1,-1)+')'):'';
+      return '<a class="post" href="articolo.html?slug='+encodeURIComponent(r.slug)+'">'
+        +'<div class="cover" style="'+c+'"><span class="cat-chip">'+r.category+'</span></div>'
+        +'<div class="body"><h3>'+r.title+'</h3><p>'+(r.excerpt||'')+'</p>'
+        +'<div class="meta"><span>'+B.fmtDate(r.date)+'</span><span>·</span><span>'+(r.readTime||B.readingTime(r.body))+' min</span></div></div></a>';
+    }).join('');
+    html+='</div></div></section>';
+  }
+
+  // CTA
+  html+='<section class="section section--tight"><div class="wrap"><div class="cta-band">'
+      +'<div><h2>Vuoi far rendere il tuo immobile?</h2><p>Richiedi una valutazione gratuita e senza impegno.</p></div>'
+      +'<a class="btn btn--grad" href="valutazione-gratuita.html"><i class="ti ti-sparkles"></i> Valutazione gratuita</a></div></div></section>';
+
+  root.innerHTML=html;
+  });
+})();
+</script>
+</body>
+</html>
