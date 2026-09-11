@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sostify · form</title>
+</head>
+<body>
+<!--
+  Questo file serve solo a Netlify per rilevare i form al momento del deploy.
+  I form reali (con la grafica) restano nelle pagine contatti / valutazione / pulizie:
+  inviano i dati a Netlify e vengono registrati grazie a queste versioni statiche.
+  Non collegare questo file dal menu: non è una pagina da mostrare ai visitatori.
+-->
+
+<!-- FORM CONTATTI -->
+<form name="contatto" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="contatto">
+  <input name="bot-field">
+  <input name="profilo">
+  <input name="nome">
+  <input type="email" name="email">
+  <input name="telefono">
+  <textarea name="messaggio"></textarea>
+</form>
+
+<!-- FORM VALUTAZIONE GRATUITA -->
+<form name="valutazione" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="valutazione">
+  <input name="bot-field">
+  <input name="nome">
+  <input type="email" name="email">
+  <input name="telefono">
+  <input name="citta">
+  <input name="immobile">
+</form>
+
+<!-- FORM LEAD PULIZIE -->
+<form name="lead-pulizie" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="lead-pulizie">
+  <input name="bot-field">
+  <input name="destinazione">
+  <input name="nome">
+  <input name="telefono">
+  <input type="email" name="email">
+  <input name="societa">
+  <input name="tipologia">
+  <input name="localita">
+  <input name="numero_immobili">
+  <input name="frequenza">
+  <input name="servizi">
+  <textarea name="note"></textarea>
+  <input type="checkbox" name="privacy">
+</form>
+
+</body>
+</html>
